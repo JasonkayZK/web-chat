@@ -8,6 +8,7 @@ import (
 func main() {
 	util.InitMongo()
 	util.InitRedis()
+	//gin.SetMode(gin.ReleaseMode)
 	webChat := router.InitRouter()
 	_ = webChat.Run(":8008")
 }
