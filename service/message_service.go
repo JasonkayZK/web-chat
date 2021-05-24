@@ -18,6 +18,9 @@ func AddChatMessage(message *model.Message) {
 
 func GetHistoryMessage(c *gin.Context) {
 	c.Header("Access-Control-Allow-Origin", "*")
+	c.Header("Access-Control-Allow-Credentials", "true")
+	c.Header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	c.Header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept")
 
 	insertTime, err := strconv.ParseInt(c.Query("insert_time"), 10, 64)
 	if err != nil {
