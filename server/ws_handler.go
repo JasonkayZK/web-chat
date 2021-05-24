@@ -36,6 +36,8 @@ func (c *Client) Writer() {
 
 func handleMsgType(c *Client) {
 	switch c.Message.MessageType {
+	case "ping":
+		return
 	case "login":
 		// 1：插入列表
 		userList = insert(c.Message.UUID, c.Message.Username)

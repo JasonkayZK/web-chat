@@ -33,10 +33,13 @@ if (isEmpty(uname) || isEmpty(uuid)) {
 }
 
 let ws = undefined;
+let wsUrl = "ws://localhost:8008/im";
+let sendFixHeartTimer = null;
+const heartBeatTime = 1000;
 
 if (uname) {
     uname = uname.trim()
-    ws = new WebSocket("ws://localhost:8008/im");
+    ws = new WebSocket(wsUrl);
     system("正在连接服务器...")
 
     ws.onopen = function () {
@@ -46,6 +49,7 @@ if (uname) {
             "content": "Hello Go WebSocket",
             "username": uname
         }));
+        sendFixHeartBeat();
     };
 
     ws.onmessage = function (evt) {// 绑定收到消息事件
@@ -63,6 +67,7 @@ if (uname) {
             "username": uname,
             "message_time": new Date().getTime()
         }))
+        clearInterval(sendFixHeartTimer)
     };
 } else {
     system("服务器未连接，请给自己起个名字吧～，<a href=''>点我起名</a>")
@@ -231,4 +236,16 @@ function isEmpty(obj) {
 function backToButton() {
     let content = document.getElementById("content");
     content.scrollTop = content.scrollHeight;
+}
+
+function sendFixHeartBeat() {
+    if (ws !== null) {
+        clearInterval(sendFixHeartTimer);
+        sendFixHeartTimer = setInterval(() => {
+            ws.send(JSON.stringify({
+                "message_type": "ping",
+
+            }))
+        }, heartBeatTime);
+    }
 }
